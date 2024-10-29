@@ -575,7 +575,11 @@ export function getWrappedStorageInstance<
             for (let index = 0; index < rows.length; index++) {
                 const writeRow = rows[index];
                 const document = flatCloneDocWithMeta(writeRow.document);
-                document._meta.lwt = time;
+
+                if (document._firstSync === undefined || document._firstSync === false)
+                    document._meta.lwt = time;        
+                  else
+                    delete document._firstSync;
 
                 /**
                  * Yes we really want to set the revision here.

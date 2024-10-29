@@ -40,6 +40,7 @@ export type RxDocumentData<T> = T & {
      */
     _rev: string;
     _meta: RxDocumentMeta;
+    _firstSync?: boolean;
 };
 
 export type RxDocumentDataById<RxDocType> = {

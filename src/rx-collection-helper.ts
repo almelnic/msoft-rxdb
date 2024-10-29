@@ -45,7 +45,11 @@ export function fillObjectDataBeforeInsert<RxDocType>(
             data
         );
     }
-    data._meta = getDefaultRxDocumentMeta();
+
+    if (data._firstSync === undefined || data._firstSync === false){
+        data._meta = getDefaultRxDocumentMeta();
+    }
+    
     if (!Object.prototype.hasOwnProperty.call(data, '_deleted')) {
         data._deleted = false;
     }
