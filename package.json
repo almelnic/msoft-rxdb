@@ -1,11 +1,12 @@
 {
-  "name": "rxdb",
+  "name": "msoft-rxdb",
   "description": "A local-first realtime NoSQL Database for JavaScript applications - https://rxdb.info/",
   "version": "15.36.1",
-  "author": "pubkey",
+  "author": "almelnic",
   "repository": {
     "type": "git",
-    "url": "https://github.com/pubkey/rxdb"
+    "url": "https://github.com/almelnic/msoft-rxdb.git",
+    "sha": "0e85bed0f785b027cc6f637ebcd303fd6a5a0654"
   },
   "homepage": "https://rxdb.info/",
   "keywords": [

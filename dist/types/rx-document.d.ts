@@ -8,6 +8,7 @@ export declare const basePrototype: {
         };
         _rev: string;
         _meta: import("./types/rx-document").RxDocumentMeta;
+        _firstSync?: boolean;
     }> | undefined;
     readonly primary: any;
     readonly revision: string | undefined;
@@ -42,6 +43,7 @@ export declare const basePrototype: {
         };
         _rev: string;
         _meta: import("./types/rx-document").RxDocumentMeta;
+        _firstSync?: boolean;
     }>;
     toMutableJSON(this: RxDocument, withMetaFields?: boolean): {
         _deleted: boolean;
@@ -50,6 +52,7 @@ export declare const basePrototype: {
         };
         _rev: string;
         _meta: import("./types/rx-document").RxDocumentMeta;
+        _firstSync?: boolean;
     };
     /**
      * updates document
@@ -96,6 +99,7 @@ export declare function createRxDocumentConstructor(proto?: {
         };
         _rev: string;
         _meta: import("./types/rx-document").RxDocumentMeta;
+        _firstSync?: boolean;
     }> | undefined;
     readonly primary: any;
     readonly revision: string | undefined;
@@ -130,6 +134,7 @@ export declare function createRxDocumentConstructor(proto?: {
         };
         _rev: string;
         _meta: import("./types/rx-document").RxDocumentMeta;
+        _firstSync?: boolean;
     }>;
     toMutableJSON(this: RxDocument, withMetaFields?: boolean): {
         _deleted: boolean;
@@ -138,6 +143,7 @@ export declare function createRxDocumentConstructor(proto?: {
         };
         _rev: string;
         _meta: import("./types/rx-document").RxDocumentMeta;
+        _firstSync?: boolean;
     };
     /**
      * updates document
@@ -185,6 +191,7 @@ export declare function createRxDocumentConstructor(proto?: {
             };
             _rev: string;
             _meta: import("./types/rx-document").RxDocumentMeta;
+            _firstSync?: boolean;
         }> | undefined;
         readonly primary: any;
         readonly revision: string | undefined;
@@ -219,6 +226,7 @@ export declare function createRxDocumentConstructor(proto?: {
             };
             _rev: string;
             _meta: import("./types/rx-document").RxDocumentMeta;
+            _firstSync?: boolean;
         }>;
         toMutableJSON(this: RxDocument, withMetaFields?: boolean): {
             _deleted: boolean;
@@ -227,6 +235,7 @@ export declare function createRxDocumentConstructor(proto?: {
             };
             _rev: string;
             _meta: import("./types/rx-document").RxDocumentMeta;
+            _firstSync?: boolean;
         };
         /**
          * updates document

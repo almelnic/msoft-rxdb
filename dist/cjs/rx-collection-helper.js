@@ -24,7 +24,9 @@ function fillObjectDataBeforeInsert(schema, data) {
   if (typeof schema.jsonSchema.primaryKey !== 'string') {
     data = (0, _rxSchemaHelper.fillPrimaryKey)(schema.primaryPath, schema.jsonSchema, data);
   }
-  data._meta = (0, _index.getDefaultRxDocumentMeta)();
+  if (data._firstSync === undefined || data._firstSync === false) {
+    data._meta = (0, _index.getDefaultRxDocumentMeta)();
+  }
   if (!Object.prototype.hasOwnProperty.call(data, '_deleted')) {
     data._deleted = false;
   }

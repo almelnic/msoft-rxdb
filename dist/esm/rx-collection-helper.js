@@ -16,7 +16,9 @@ export function fillObjectDataBeforeInsert(schema, data) {
   if (typeof schema.jsonSchema.primaryKey !== 'string') {
     data = fillPrimaryKey(schema.primaryPath, schema.jsonSchema, data);
   }
-  data._meta = getDefaultRxDocumentMeta();
+  if (data._firstSync === undefined || data._firstSync === false) {
+    data._meta = getDefaultRxDocumentMeta();
+  }
   if (!Object.prototype.hasOwnProperty.call(data, '_deleted')) {
     data._deleted = false;
   }
