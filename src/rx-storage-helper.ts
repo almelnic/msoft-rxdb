@@ -577,7 +577,7 @@ export function getWrappedStorageInstance<
                 const document = flatCloneDocWithMeta(writeRow.document);
 
                 if (document._firstSync === undefined || document._firstSync === false)
-                    document._meta.lwt = time;        
+                    document._meta.lwt = time;
                   else
                     delete document._firstSync;
 
