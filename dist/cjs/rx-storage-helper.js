@@ -444,7 +444,12 @@ rxJsonSchema) {
       for (var index = 0; index < rows.length; index++) {
         var writeRow = rows[index];
         var document = flatCloneDocWithMeta(writeRow.document);
-        if (document._firstSync === undefined || document._firstSync === false) document._meta.lwt = time;else delete document._firstSync;
+        if (document.pg_meta === undefined) {
+          document._meta.lwt = time;
+        } else {
+          document._meta.lwt = document.pg_meta.lwt;
+          //delete (data as any).pg_meta;
+        }
 
         /**
          * Yes we really want to set the revision here.

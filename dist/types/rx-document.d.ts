@@ -8,7 +8,7 @@ export declare const basePrototype: {
         };
         _rev: string;
         _meta: import("./types/rx-document").RxDocumentMeta;
-        _firstSync?: boolean;
+        pg_meta?: import("./types/rx-document").RxDocumentMeta;
     }> | undefined;
     readonly primary: any;
     readonly revision: string | undefined;
@@ -43,7 +43,7 @@ export declare const basePrototype: {
         };
         _rev: string;
         _meta: import("./types/rx-document").RxDocumentMeta;
-        _firstSync?: boolean;
+        pg_meta?: import("./types/rx-document").RxDocumentMeta;
     }>;
     toMutableJSON(this: RxDocument, withMetaFields?: boolean): {
         _deleted: boolean;
@@ -52,7 +52,7 @@ export declare const basePrototype: {
         };
         _rev: string;
         _meta: import("./types/rx-document").RxDocumentMeta;
-        _firstSync?: boolean;
+        pg_meta?: import("./types/rx-document").RxDocumentMeta;
     };
     /**
      * updates document
@@ -99,7 +99,7 @@ export declare function createRxDocumentConstructor(proto?: {
         };
         _rev: string;
         _meta: import("./types/rx-document").RxDocumentMeta;
-        _firstSync?: boolean;
+        pg_meta?: import("./types/rx-document").RxDocumentMeta;
     }> | undefined;
     readonly primary: any;
     readonly revision: string | undefined;
@@ -134,7 +134,7 @@ export declare function createRxDocumentConstructor(proto?: {
         };
         _rev: string;
         _meta: import("./types/rx-document").RxDocumentMeta;
-        _firstSync?: boolean;
+        pg_meta?: import("./types/rx-document").RxDocumentMeta;
     }>;
     toMutableJSON(this: RxDocument, withMetaFields?: boolean): {
         _deleted: boolean;
@@ -143,7 +143,7 @@ export declare function createRxDocumentConstructor(proto?: {
         };
         _rev: string;
         _meta: import("./types/rx-document").RxDocumentMeta;
-        _firstSync?: boolean;
+        pg_meta?: import("./types/rx-document").RxDocumentMeta;
     };
     /**
      * updates document
@@ -191,7 +191,7 @@ export declare function createRxDocumentConstructor(proto?: {
             };
             _rev: string;
             _meta: import("./types/rx-document").RxDocumentMeta;
-            _firstSync?: boolean;
+            pg_meta?: import("./types/rx-document").RxDocumentMeta;
         }> | undefined;
         readonly primary: any;
         readonly revision: string | undefined;
@@ -226,7 +226,7 @@ export declare function createRxDocumentConstructor(proto?: {
             };
             _rev: string;
             _meta: import("./types/rx-document").RxDocumentMeta;
-            _firstSync?: boolean;
+            pg_meta?: import("./types/rx-document").RxDocumentMeta;
         }>;
         toMutableJSON(this: RxDocument, withMetaFields?: boolean): {
             _deleted: boolean;
@@ -235,7 +235,7 @@ export declare function createRxDocumentConstructor(proto?: {
             };
             _rev: string;
             _meta: import("./types/rx-document").RxDocumentMeta;
-            _firstSync?: boolean;
+            pg_meta?: import("./types/rx-document").RxDocumentMeta;
         };
         /**
          * updates document
