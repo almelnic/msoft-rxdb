@@ -424,7 +424,7 @@ rxJsonSchema) {
           document._meta.lwt = time;
         } else {
           document._meta.lwt = document.pg_meta.lwt;
-          //delete (data as any).pg_meta;
+          // delete (data as any).pg_meta;
         }
 
         /**

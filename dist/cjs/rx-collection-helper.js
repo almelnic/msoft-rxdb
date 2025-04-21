@@ -28,7 +28,7 @@ function fillObjectDataBeforeInsert(schema, data) {
     data._meta = (0, _index.getDefaultRxDocumentMeta)();
   } else {
     data._meta = data.pg_meta;
-    //delete (data as any).pg_meta;
+    // delete (data as any).pg_meta;
   }
   if (!Object.prototype.hasOwnProperty.call(data, '_deleted')) {
     data._deleted = false;

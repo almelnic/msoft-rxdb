@@ -115,7 +115,10 @@ async function replicateWithWebsocketServer(options) {
         };
         wsClient.send(JSON.stringify(request));
         return (0, _rxjs.firstValueFrom)(messages$.pipe((0, _rxjs.filter)(msg => msg.id === requestId), (0, _rxjs.map)(msg => msg.result)));
-      }
+      },
+      initialCheckpoint: options.ignorePushInitialSync ? {
+        lwt: 9999999999000
+      } : undefined
     }
   });
   websocketClient.error$.subscribe(err => replicationState.subjects.error.next(err));

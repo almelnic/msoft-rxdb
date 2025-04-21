@@ -106,7 +106,10 @@ export async function replicateWithWebsocketServer(options) {
         };
         wsClient.send(JSON.stringify(request));
         return firstValueFrom(messages$.pipe(filter(msg => msg.id === requestId), map(msg => msg.result)));
-      }
+      },
+      initialCheckpoint: options.ignorePushInitialSync ? {
+        lwt: 9999999999000
+      } : undefined
     }
   });
   websocketClient.error$.subscribe(err => replicationState.subjects.error.next(err));

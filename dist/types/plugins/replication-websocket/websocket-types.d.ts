@@ -18,6 +18,7 @@ export type WebsocketClientOptions<RxDocType> = {
     headers?: {
         [k: string]: string;
     };
+    ignorePushInitialSync?: boolean;
 } & ClientOptions;
 export type WebsocketMessageType = {
     id: string;

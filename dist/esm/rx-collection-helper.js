@@ -20,7 +20,7 @@ export function fillObjectDataBeforeInsert(schema, data) {
     data._meta = getDefaultRxDocumentMeta();
   } else {
     data._meta = data.pg_meta;
-    //delete (data as any).pg_meta;
+    // delete (data as any).pg_meta;
   }
   if (!Object.prototype.hasOwnProperty.call(data, '_deleted')) {
     data._deleted = false;
