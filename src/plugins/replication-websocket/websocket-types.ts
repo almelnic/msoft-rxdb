@@ -32,6 +32,7 @@ export type WebsocketClientOptions<RxDocType> = {
     live?: boolean;
     headers?: { [k: string]: string; };
     filters?: [any];
+    ignorePushInitialSync?: boolean;    
 } & ClientOptions;
 
 export type WebsocketMessageType = {

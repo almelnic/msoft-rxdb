@@ -40,6 +40,7 @@ export type RxDocumentData<T> = T & {
      */
     _rev: string;
     _meta: RxDocumentMeta;
+    pg_meta?: RxDocumentMeta; // туту храним lwt из Postgres
 };
 
 export type RxDocumentDataById<RxDocType> = {

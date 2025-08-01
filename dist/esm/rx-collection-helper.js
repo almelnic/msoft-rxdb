@@ -16,7 +16,12 @@ export function fillObjectDataBeforeInsert(schema, data) {
   if (typeof schema.jsonSchema.primaryKey !== 'string') {
     data = fillPrimaryKey(schema.primaryPath, schema.jsonSchema, data);
   }
-  data._meta = getDefaultRxDocumentMeta();
+  if (data.pg_meta === undefined) {
+    data._meta = getDefaultRxDocumentMeta();
+  } else {
+    data._meta = data.pg_meta;
+    // delete (data as any).pg_meta;
+  }
   if (!Object.prototype.hasOwnProperty.call(data, '_deleted')) {
     data._deleted = false;
   }

@@ -45,7 +45,14 @@ export function fillObjectDataBeforeInsert<RxDocType>(
             data
         );
     }
-    data._meta = getDefaultRxDocumentMeta();
+
+    if (data.pg_meta === undefined) {
+        data._meta = getDefaultRxDocumentMeta();
+    } else {
+        data._meta = data.pg_meta;
+        // delete (data as any).pg_meta;
+    }
+
     if (!Object.prototype.hasOwnProperty.call(data, '_deleted')) {
         data._deleted = false;
     }

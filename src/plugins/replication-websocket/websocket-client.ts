@@ -169,7 +169,8 @@ export async function replicateWithWebsocketServer<RxDocType, CheckpointType>(
                         map(msg => msg.result)
                     )
                 );
-            }
+            },
+            initialCheckpoint : (options.ignorePushInitialSync) ? {lwt:9999999999000} : undefined
         }
     });
 
