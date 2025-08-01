@@ -806,32 +806,47 @@ export function hasEncryption(jsonSchema: RxJsonSchema<any>): boolean {
 export function getChangedDocumentsSinceQuery<RxDocType, CheckpointType>(
     storageInstance: RxStorageInstance<RxDocType, any, any, CheckpointType>,
     limit: number,
-    checkpoint?: CheckpointType
+    checkpoint?: CheckpointType,
+    filterByField?: any
 ): FilledMangoQuery<RxDocType> {
+    let addFilter: Record<string, string> = {};
+    if (filterByField != null) {
+        if (Object.prototype.hasOwnProperty.call(filterByField, storageInstance.collectionName)) {
+            const filterFieldName = filterByField[storageInstance.collectionName].fieldName;
+            const filterFieldValue = filterByField[storageInstance.collectionName].value;
+            addFilter = { [filterFieldName]: filterFieldValue };
+        }
+    }
+
     const primaryPath = getPrimaryFieldOfPrimaryKey(storageInstance.schema.primaryKey);
     const sinceLwt = checkpoint ? (checkpoint as unknown as RxStorageDefaultCheckpoint).lwt : RX_META_LWT_MINIMUM;
     const sinceId = checkpoint ? (checkpoint as unknown as RxStorageDefaultCheckpoint).id : '';
     return normalizeMangoQuery(storageInstance.schema, {
         selector: {
-            $or: [
+            $and: [
                 {
+                    $or: [
+                        {
+                            '_meta.lwt': {
+                                $gt: sinceLwt
+                            }
+                        },
+                        {
+                            '_meta.lwt': {
+                                $eq: sinceLwt
+                            },
+                            [primaryPath]: {
+                                $gt: checkpoint ? sinceId : ''
+                            }
+                        }
+                    ],
+                    // add this hint for better index usage
                     '_meta.lwt': {
-                        $gt: sinceLwt
+                        $gte: sinceLwt
                     }
                 },
-                {
-                    '_meta.lwt': {
-                        $eq: sinceLwt
-                    },
-                    [primaryPath]: {
-                        $gt: checkpoint ? sinceId : ''
-                    }
-                }
-            ],
-            // add this hint for better index usage
-            '_meta.lwt': {
-                $gte: sinceLwt
-            }
+                addFilter
+            ]
         } as any,
         sort: [
             { '_meta.lwt': 'asc' },
@@ -853,7 +868,8 @@ export function getChangedDocumentsSinceQuery<RxDocType, CheckpointType>(
 export async function getChangedDocumentsSince<RxDocType, CheckpointType>(
     storageInstance: RxStorageInstance<RxDocType, any, any, CheckpointType>,
     limit: number,
-    checkpoint?: CheckpointType
+    checkpoint?: CheckpointType,
+    filterByField?: any
 ): Promise<{
     documents: RxDocumentData<RxDocType>[];
     /**
@@ -866,14 +882,15 @@ export async function getChangedDocumentsSince<RxDocType, CheckpointType>(
     if (storageInstance.getChangedDocumentsSince) {
         return storageInstance.getChangedDocumentsSince(limit, checkpoint);
     }
-
+    console.log(`filterByField -> ${JSON.stringify(filterByField)}`);
     const primaryPath = getPrimaryFieldOfPrimaryKey(storageInstance.schema.primaryKey);
     const query = prepareQuery<RxDocumentData<any>>(
         storageInstance.schema,
         getChangedDocumentsSinceQuery(
             storageInstance,
             limit,
-            checkpoint
+            checkpoint,
+            filterByField
         )
     );
 

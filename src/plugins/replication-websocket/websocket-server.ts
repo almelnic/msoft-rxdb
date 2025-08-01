@@ -80,6 +80,7 @@ export function getReplicationHandlerByCollection<RxDocType>(
                 collection.conflictHandler,
                 database.token
             );
+
         }
     );
     return handler;
@@ -94,15 +95,19 @@ export function startWebsocketServer(options: WebsocketServerOptions): Websocket
 
     serverState.onConnection$.subscribe(ws => {
         const onCloseHandlers: Function[] = [];
+        console.log('ws.onopen')
         ws.onclose = () => {
             onCloseHandlers.map(fn => fn());
         };
         ws.on('message', async (messageString: string) => {
+            const s = messageString.toString();
             const message: WebsocketMessageType = JSON.parse(messageString);
             const handler = getReplicationHandlerByCollection(database, message.collection);
             if (message.method === 'auth') {
                 return;
             }
+
+            console.log(`ws.on('message'... -> ${message.method} - ${message.collection}`);
             const method = handler[message.method];
 
             /**
@@ -110,6 +115,7 @@ export function startWebsocketServer(options: WebsocketServerOptions): Websocket
              * it means that the client requested the masterChangeStream$
              */
             if (typeof method !== 'function') {
+                console.log(`ws.on('message'... ->  1`);
                 const changeStreamSub = handler.masterChangeStream$.subscribe(ev => {
                     const streamResponse: WebsocketMessageResponseType = {
                         id: 'stream',
@@ -121,6 +127,10 @@ export function startWebsocketServer(options: WebsocketServerOptions): Websocket
                 onCloseHandlers.push(() => changeStreamSub.unsubscribe());
                 return;
             }
+            else {
+                console.log(`ws.on('message'... ->  2`);
+            }
+
             const result = await (method as any)(...message.params);
             const response: WebsocketMessageResponseType = {
                 id: message.id,

@@ -140,7 +140,7 @@ export async function replicateWithWebsocketServer<RxDocType, CheckpointType>(
                     id: requestId,
                     collection: options.collection.name,
                     method: 'masterChangesSince',
-                    params: [lastPulledCheckpoint, batchSize]
+                    params: [lastPulledCheckpoint, batchSize, options.filters]
                 };
                 wsClient.send(JSON.stringify(request));
                 const result = await firstValueFrom(

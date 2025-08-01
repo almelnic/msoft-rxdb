@@ -31,9 +31,11 @@ export type WebsocketClientOptions<RxDocType> = {
     batchSize?: number;
     live?: boolean;
     headers?: { [k: string]: string; };
+    filters?: [any];
 } & ClientOptions;
 
 export type WebsocketMessageType = {
+    [x: string]: {};
     id: string;
     collection: string;
     method: StringKeys<RxReplicationHandler<any, any>> | 'auth';

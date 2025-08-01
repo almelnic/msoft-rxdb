@@ -96,7 +96,8 @@ export type RxReplicationHandler<RxDocType, MasterCheckpointType> = {
     masterChangeStream$: Observable<RxReplicationPullStreamItem<RxDocType, MasterCheckpointType>>;
     masterChangesSince(
         checkpoint: MasterCheckpointType,
-        batchSize: number
+        batchSize: number,
+        filterByField: string
     ): Promise<DocumentsWithCheckpoint<RxDocType, MasterCheckpointType>>;
     /**
      * Writes the fork changes to the master.
