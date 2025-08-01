@@ -1,4 +1,4 @@
-import { useOperators, OpType } from 'mingo/core';
+import { useOperators, OperatorType } from 'mingo/core';
 import { Query } from 'mingo/query';
 import type { MangoQuerySelector } from './types/index.d.ts';
 import {
@@ -48,11 +48,11 @@ export function getMingoQuery<RxDocType>(
     selector?: MangoQuerySelector<RxDocType>
 ) {
     if (!mingoInitDone) {
-        useOperators(OpType.PIPELINE, {
+        useOperators(OperatorType.PIPELINE, {
             $sort,
             $project
         } as any);
-        useOperators(OpType.QUERY, {
+        useOperators(OperatorType.QUERY, {
             $and,
             $eq,
             $elemMatch,

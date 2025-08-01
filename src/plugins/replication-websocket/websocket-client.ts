@@ -140,7 +140,7 @@ export async function replicateWithWebsocketServer<RxDocType, CheckpointType>(
                     id: requestId,
                     collection: options.collection.name,
                     method: 'masterChangesSince',
-                    params: [lastPulledCheckpoint, batchSize, options.filters]
+                    params: [lastPulledCheckpoint, batchSize, options.filterByField]
                 };
                 wsClient.send(JSON.stringify(request));
                 const result = await firstValueFrom(
@@ -170,7 +170,7 @@ export async function replicateWithWebsocketServer<RxDocType, CheckpointType>(
                     )
                 );
             },
-            initialCheckpoint : (options.ignorePushInitialSync) ? {lwt:9999999999000} : undefined
+            initialCheckpoint: (options.ignorePushInitialSync) ? { lwt: 9999999999000 } : undefined
         }
     });
 
