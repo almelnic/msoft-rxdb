@@ -71,15 +71,19 @@ function startWebsocketServer(options) {
   database.onDestroy.push(() => serverState.close());
   serverState.onConnection$.subscribe(ws => {
     var onCloseHandlers = [];
+    // console.log('ws.onopen')
     ws.onclose = () => {
       onCloseHandlers.map(fn => fn());
     };
     ws.on('message', async messageString => {
+      var s = messageString.toString();
       var message = JSON.parse(messageString);
       var handler = getReplicationHandlerByCollection(database, message.collection);
       if (message.method === 'auth') {
         return;
       }
+
+      // console.log(`ws.on('message'... -> ${message.method} - ${message.collection}`);
       var method = handler[message.method];
 
       /**
@@ -87,6 +91,7 @@ function startWebsocketServer(options) {
        * it means that the client requested the masterChangeStream$
        */
       if (typeof method !== 'function') {
+        // console.log(`ws.on('message'... ->  1`);
         var changeStreamSub = handler.masterChangeStream$.subscribe(ev => {
           var streamResponse = {
             id: 'stream',
@@ -97,6 +102,8 @@ function startWebsocketServer(options) {
         });
         onCloseHandlers.push(() => changeStreamSub.unsubscribe());
         return;
+      } else {
+        // console.log(`ws.on('message'... ->  2`);
       }
       var result = await method(...message.params);
       var response = {

@@ -127,10 +127,12 @@ keepMeta = false) {
           return docData;
         }))
       };
+      // console.log(`masterChangeStream$ ->>> ${JSON.stringify(ret)}`);
       return ret;
     })),
-    masterChangesSince(checkpoint, batchSize) {
-      return getChangedDocumentsSince(instance, batchSize, checkpoint).then(async result => {
+    masterChangesSince(checkpoint, batchSize, filterByField) {
+      // console.log(`masterChangesSince ->>> ${JSON.stringify(checkpoint)}`);
+      return getChangedDocumentsSince(instance, batchSize, checkpoint, filterByField).then(async result => {
         return {
           checkpoint: result.documents.length > 0 ? result.checkpoint : checkpoint,
           documents: await Promise.all(result.documents.map(async plainDocumentData => {
@@ -191,6 +193,7 @@ keepMeta = false) {
           }
         });
       }
+      // console.log(`masterWrite ->>> ${JSON.stringify(rows)}`);
       return conflicts;
     }
   };

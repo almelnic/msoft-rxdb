@@ -87,7 +87,7 @@ export async function replicateWithWebsocketServer(options) {
           id: requestId,
           collection: options.collection.name,
           method: 'masterChangesSince',
-          params: [lastPulledCheckpoint, batchSize]
+          params: [lastPulledCheckpoint, batchSize, options.filterByField]
         };
         wsClient.send(JSON.stringify(request));
         var result = await firstValueFrom(messages$.pipe(filter(msg => msg.id === requestId), map(msg => msg.result)));

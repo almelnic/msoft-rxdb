@@ -18,9 +18,11 @@ export type WebsocketClientOptions<RxDocType> = {
     headers?: {
         [k: string]: string;
     };
+    filterByField?: [any];
     ignorePushInitialSync?: boolean;
 } & ClientOptions;
 export type WebsocketMessageType = {
+    [x: string]: {};
     id: string;
     collection: string;
     method: StringKeys<RxReplicationHandler<any, any>> | 'auth';

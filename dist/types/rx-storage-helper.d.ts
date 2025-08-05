@@ -86,8 +86,8 @@ rxJsonSchema: RxJsonSchema<RxDocumentData<RxDocType>>): WrappedRxStorageInstance
  */
 export declare function ensureRxStorageInstanceParamsAreCorrect(params: RxStorageInstanceCreationParams<any, any>): void;
 export declare function hasEncryption(jsonSchema: RxJsonSchema<any>): boolean;
-export declare function getChangedDocumentsSinceQuery<RxDocType, CheckpointType>(storageInstance: RxStorageInstance<RxDocType, any, any, CheckpointType>, limit: number, checkpoint?: CheckpointType): FilledMangoQuery<RxDocType>;
-export declare function getChangedDocumentsSince<RxDocType, CheckpointType>(storageInstance: RxStorageInstance<RxDocType, any, any, CheckpointType>, limit: number, checkpoint?: CheckpointType): Promise<{
+export declare function getChangedDocumentsSinceQuery<RxDocType, CheckpointType>(storageInstance: RxStorageInstance<RxDocType, any, any, CheckpointType>, limit: number, checkpoint?: CheckpointType, filterByField?: any): FilledMangoQuery<RxDocType>;
+export declare function getChangedDocumentsSince<RxDocType, CheckpointType>(storageInstance: RxStorageInstance<RxDocType, any, any, CheckpointType>, limit: number, checkpoint?: CheckpointType, filterByField?: any): Promise<{
     documents: RxDocumentData<RxDocType>[];
     /**
      * The checkpoint contains data so that another

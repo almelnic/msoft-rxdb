@@ -583,28 +583,40 @@ export function hasEncryption(jsonSchema) {
     return false;
   }
 }
-export function getChangedDocumentsSinceQuery(storageInstance, limit, checkpoint) {
+export function getChangedDocumentsSinceQuery(storageInstance, limit, checkpoint, filterByField) {
+  var addFilter = {};
+  if (filterByField != null) {
+    if (Object.prototype.hasOwnProperty.call(filterByField, storageInstance.collectionName)) {
+      var filterFieldName = filterByField[storageInstance.collectionName].fieldName;
+      var filterFieldValue = filterByField[storageInstance.collectionName].value;
+      addFilter = {
+        [filterFieldName]: filterFieldValue
+      };
+    }
+  }
   var primaryPath = getPrimaryFieldOfPrimaryKey(storageInstance.schema.primaryKey);
   var sinceLwt = checkpoint ? checkpoint.lwt : RX_META_LWT_MINIMUM;
   var sinceId = checkpoint ? checkpoint.id : '';
   return normalizeMangoQuery(storageInstance.schema, {
     selector: {
-      $or: [{
+      $and: [{
+        $or: [{
+          '_meta.lwt': {
+            $gt: sinceLwt
+          }
+        }, {
+          '_meta.lwt': {
+            $eq: sinceLwt
+          },
+          [primaryPath]: {
+            $gt: checkpoint ? sinceId : ''
+          }
+        }],
+        // add this hint for better index usage
         '_meta.lwt': {
-          $gt: sinceLwt
+          $gte: sinceLwt
         }
-      }, {
-        '_meta.lwt': {
-          $eq: sinceLwt
-        },
-        [primaryPath]: {
-          $gt: checkpoint ? sinceId : ''
-        }
-      }],
-      // add this hint for better index usage
-      '_meta.lwt': {
-        $gte: sinceLwt
-      }
+      }, addFilter]
     },
     sort: [{
       '_meta.lwt': 'asc'
@@ -623,12 +635,13 @@ export function getChangedDocumentsSinceQuery(storageInstance, limit, checkpoint
     // index: ['_meta.lwt', primaryPath]
   });
 }
-export async function getChangedDocumentsSince(storageInstance, limit, checkpoint) {
+export async function getChangedDocumentsSince(storageInstance, limit, checkpoint, filterByField) {
   if (storageInstance.getChangedDocumentsSince) {
     return storageInstance.getChangedDocumentsSince(limit, checkpoint);
   }
+  // console.log(`filterByField -> ${JSON.stringify(filterByField)}`);
   var primaryPath = getPrimaryFieldOfPrimaryKey(storageInstance.schema.primaryKey);
-  var query = prepareQuery(storageInstance.schema, getChangedDocumentsSinceQuery(storageInstance, limit, checkpoint));
+  var query = prepareQuery(storageInstance.schema, getChangedDocumentsSinceQuery(storageInstance, limit, checkpoint, filterByField));
   var result = await storageInstance.query(query);
   var documents = result.documents;
   var lastDoc = lastOfArray(documents);

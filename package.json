@@ -1,7 +1,7 @@
 {
   "name": "almelnic-rxdb",
   "description": "A local-first realtime NoSQL Database for JavaScript applications - https://rxdb.info/",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "author": "almelnic",
   "repository": {
     "type": "git",
