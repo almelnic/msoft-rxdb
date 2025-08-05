@@ -205,7 +205,7 @@ export function rxStorageInstanceToReplicationHandler<RxDocType, MasterCheckpoin
                         })
                     )
                 };
-                console.log(`masterChangeStream$ ->>> ${JSON.stringify(ret)}`);
+                // console.log(`masterChangeStream$ ->>> ${JSON.stringify(ret)}`);
                 return ret;
             })
         ),
@@ -214,7 +214,7 @@ export function rxStorageInstanceToReplicationHandler<RxDocType, MasterCheckpoin
             batchSize,
             filterByField
         ) {
-            console.log(`masterChangesSince ->>> ${JSON.stringify(checkpoint)}`);
+            // console.log(`masterChangesSince ->>> ${JSON.stringify(checkpoint)}`);
             return getChangedDocumentsSince(
                 instance,
                 batchSize,
@@ -308,7 +308,7 @@ export function rxStorageInstanceToReplicationHandler<RxDocType, MasterCheckpoin
                     }
                 });
             }
-            console.log(`masterWrite ->>> ${JSON.stringify(rows)}`);
+            // console.log(`masterWrite ->>> ${JSON.stringify(rows)}`);
             return conflicts;
         }
     };

@@ -888,7 +888,7 @@ export async function getChangedDocumentsSince<RxDocType, CheckpointType>(
     if (storageInstance.getChangedDocumentsSince) {
         return storageInstance.getChangedDocumentsSince(limit, checkpoint);
     }
-    console.log(`filterByField -> ${JSON.stringify(filterByField)}`);
+    // console.log(`filterByField -> ${JSON.stringify(filterByField)}`);
     const primaryPath = getPrimaryFieldOfPrimaryKey(storageInstance.schema.primaryKey);
     const query = prepareQuery<RxDocumentData<any>>(
         storageInstance.schema,

@@ -95,7 +95,7 @@ export function startWebsocketServer(options: WebsocketServerOptions): Websocket
 
     serverState.onConnection$.subscribe(ws => {
         const onCloseHandlers: Function[] = [];
-        console.log('ws.onopen')
+        // console.log('ws.onopen')
         ws.onclose = () => {
             onCloseHandlers.map(fn => fn());
         };
@@ -107,7 +107,7 @@ export function startWebsocketServer(options: WebsocketServerOptions): Websocket
                 return;
             }
 
-            console.log(`ws.on('message'... -> ${message.method} - ${message.collection}`);
+            // console.log(`ws.on('message'... -> ${message.method} - ${message.collection}`);
             const method = handler[message.method];
 
             /**
@@ -115,7 +115,7 @@ export function startWebsocketServer(options: WebsocketServerOptions): Websocket
              * it means that the client requested the masterChangeStream$
              */
             if (typeof method !== 'function') {
-                console.log(`ws.on('message'... ->  1`);
+                // console.log(`ws.on('message'... ->  1`);
                 const changeStreamSub = handler.masterChangeStream$.subscribe(ev => {
                     const streamResponse: WebsocketMessageResponseType = {
                         id: 'stream',
@@ -128,7 +128,7 @@ export function startWebsocketServer(options: WebsocketServerOptions): Websocket
                 return;
             }
             else {
-                console.log(`ws.on('message'... ->  2`);
+                // console.log(`ws.on('message'... ->  2`);
             }
 
             const result = await (method as any)(...message.params);
