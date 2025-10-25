@@ -1,9 +1,8 @@
 import { replicateRxCollection } from "../replication/index.js";
 import ReconnectingWebSocket from 'reconnecting-websocket';
 import IsomorphicWebSocket from 'isomorphic-ws';
-import { errorToPlainJson, randomCouchString, toArray } from "../../plugins/utils/index.js";
+import { randomCouchString } from "../../plugins/utils/index.js";
 import { filter, map, Subject, firstValueFrom, BehaviorSubject } from 'rxjs';
-import { newRxError } from "../../rx-error.js";
 /**
  * Copied and adapted from the 'reconnecting-websocket' npm module.
  * Some bundlers have problems with bundling the isomorphic-ws plugin
@@ -26,13 +25,18 @@ export async function createWebSocketClient(options) {
   var message$ = new Subject();
   var error$ = new Subject();
   wsClient.onerror = err => {
-    console.log('--- WAS CLIENT GOT ERROR:');
-    console.log(err.error.message);
-    var emitError = newRxError('RC_STREAM', {
-      errors: toArray(err).map(er => errorToPlainJson(er)),
-      direction: 'pull'
-    });
-    error$.next(emitError);
+    var errText = !(typeof err.error === 'undefined') ? err.error.message : 'unknown websocket error';
+    console.log("--- WAS CLIENT GOT ERROR: " + errText);
+    if (!options.initConnected$?.closed) {
+      options.initConnected$?.next(false);
+    }
+    // console.log(err.error.message);
+
+    // const emitError = newRxError('RC_STREAM', {
+    //     errors: toArray(err).map((er: any) => errorToPlainJson(er)),
+    //     direction: 'pull'
+    // });
+    error$.next(errText);
   };
   await new Promise(res => {
     wsClient.onopen = () => {
@@ -137,6 +141,9 @@ export async function replicateWithWebsocketServer(options) {
     }
   });
   options.collection.onDestroy.push(() => websocketClient.socket.close());
-  return replicationState;
+  return {
+    replicationState: replicationState,
+    websocketClient: websocketClient
+  };
 }
 //# sourceMappingURL=websocket-client.js.map

@@ -3,6 +3,10 @@ import { WebsocketClientOptions } from './websocket-types.ts';
 import IsomorphicWebSocket from 'isomorphic-ws';
 import { Subject, BehaviorSubject } from 'rxjs';
 import type { RxError } from '../../types/index.d.ts';
+export type ReplicationSateAndWebsocketClient = {
+    replicationState: RxReplicationState<any, any>;
+    websocketClient: WebsocketClient;
+};
 export type WebsocketClient = {
     url: string;
     socket: any;
@@ -18,4 +22,4 @@ export type WebsocketClient = {
  */
 export declare function ensureIsWebsocket(w: typeof IsomorphicWebSocket): void;
 export declare function createWebSocketClient<RxDocType>(options: WebsocketClientOptions<RxDocType>): Promise<WebsocketClient>;
-export declare function replicateWithWebsocketServer<RxDocType, CheckpointType>(options: WebsocketClientOptions<RxDocType>): Promise<RxReplicationState<RxDocType, CheckpointType>>;
+export declare function replicateWithWebsocketServer<RxDocType, CheckpointType>(options: WebsocketClientOptions<RxDocType>): Promise<ReplicationSateAndWebsocketClient>;

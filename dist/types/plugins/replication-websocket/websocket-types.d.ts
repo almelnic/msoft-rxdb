@@ -1,4 +1,4 @@
-import type { Observable } from 'rxjs';
+import type { Observable, BehaviorSubject } from 'rxjs';
 import type { ServerOptions, ClientOptions, WebSocketServer, WebSocket } from 'ws';
 import type { RxCollection, RxDatabase, RxReplicationHandler, StringKeys } from '../../types/index.d.ts';
 export type WebsocketServerOptions = {
@@ -20,6 +20,7 @@ export type WebsocketClientOptions<RxDocType> = {
     };
     filterByField?: [any];
     ignorePushInitialSync?: boolean;
+    initConnected$?: BehaviorSubject<boolean>;
 } & ClientOptions;
 export type WebsocketMessageType = {
     [x: string]: {};
