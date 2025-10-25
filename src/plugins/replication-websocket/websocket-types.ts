@@ -1,5 +1,6 @@
 import type {
     Observable,
+    BehaviorSubject
 } from 'rxjs';
 import type {
     ServerOptions,
@@ -33,6 +34,7 @@ export type WebsocketClientOptions<RxDocType> = {
     headers?: { [k: string]: string; };
     filterByField?: [any];
     ignorePushInitialSync?: boolean;
+    initConnected$?: BehaviorSubject<boolean>;
 } & ClientOptions;
 
 export type WebsocketMessageType = {

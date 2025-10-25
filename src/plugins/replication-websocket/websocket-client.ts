@@ -28,6 +28,11 @@ import type {
 } from '../../types/index.d.ts';
 import { newRxError } from '../../rx-error.ts';
 
+export type ReplicationSateAndWebsocketClient = {
+    replicationState: RxReplicationState<any, any>;
+    websocketClient: WebsocketClient;
+}
+
 export type WebsocketClient = {
     url: string;
     socket: any;
@@ -65,15 +70,19 @@ export async function createWebSocketClient<RxDocType>(options: WebsocketClientO
     const message$ = new Subject<any>();
     const error$ = new Subject<any>();
     wsClient.onerror = (err) => {
+        const errText = (!(typeof (err.error) === 'undefined')) ? err.error.message : 'unknown websocket error';
+        console.log(`--- WAS CLIENT GOT ERROR: ${errText}`);
 
-        console.log('--- WAS CLIENT GOT ERROR:');
-        console.log(err.error.message);
+        if (!options.initConnected$?.closed) {
+            options.initConnected$?.next(false);
+        }
+        // console.log(err.error.message);
 
-        const emitError = newRxError('RC_STREAM', {
-            errors: toArray(err).map((er: any) => errorToPlainJson(er)),
-            direction: 'pull'
-        });
-        error$.next(emitError);
+        // const emitError = newRxError('RC_STREAM', {
+        //     errors: toArray(err).map((er: any) => errorToPlainJson(er)),
+        //     direction: 'pull'
+        // });
+        error$.next(errText);
     };
     await new Promise<void>(res => {
         wsClient.onopen = () => {
@@ -113,7 +122,7 @@ export async function createWebSocketClient<RxDocType>(options: WebsocketClientO
 
 export async function replicateWithWebsocketServer<RxDocType, CheckpointType>(
     options: WebsocketClientOptions<RxDocType>
-): Promise<RxReplicationState<RxDocType, CheckpointType>> {
+): Promise<ReplicationSateAndWebsocketClient> {
     const websocketClient = await createWebSocketClient(options);
     const wsClient = websocketClient.socket;
     const messages$ = websocketClient.message$;
@@ -201,5 +210,10 @@ export async function replicateWithWebsocketServer<RxDocType, CheckpointType>(
     });
 
     options.collection.onDestroy.push(() => websocketClient.socket.close());
-    return replicationState;
+
+
+    return {
+        replicationState: replicationState,
+        websocketClient: websocketClient
+    };
 }
