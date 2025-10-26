@@ -1,4 +1,4 @@
 /**
  * This file is replaced in the 'npm run build:version' script.
  */
-export const RXDB_VERSION = '1.0.8';
+export const RXDB_VERSION = '1.0.9';

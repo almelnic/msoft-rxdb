@@ -62,7 +62,6 @@ export function startWebsocketServer(options) {
   database.onDestroy.push(() => serverState.close());
   serverState.onConnection$.subscribe(ws => {
     var onCloseHandlers = [];
-    // console.log('ws.onopen')
     ws.onclose = () => {
       onCloseHandlers.map(fn => fn());
     };
@@ -84,12 +83,29 @@ export function startWebsocketServer(options) {
       if (typeof method !== 'function') {
         // console.log(`ws.on('message'... ->  1`);
         var changeStreamSub = handler.masterChangeStream$.subscribe(ev => {
-          var streamResponse = {
-            id: 'stream',
-            collection: message.collection,
-            result: ev
-          };
-          ws.send(JSON.stringify(streamResponse));
+          // если 1-й элемент массива message.params присутствует, значит там объект
+          // filterByField, который пришел от клиента websocket-client.ts строка 206
+          var filterByField = message.params[0];
+          if (filterByField != null) {
+            // фильтруем документы, чтобы клиенту не отправлялись только его данные
+            if (Object.prototype.hasOwnProperty.call(filterByField, message.collection)) {
+              var filterFieldName = filterByField[message.collection].fieldName;
+              var filterFieldValue = filterByField[message.collection].value;
+              ev.documents = ev.documents.filter(el => el[filterFieldName] == filterFieldValue);
+            }
+            // console.log(ev.documents, message.params[0]);
+          }
+
+          // сообщение клиенту отправляем, только если кол-во документов больше 0
+          if (ev.documents.length > 0) {
+            var streamResponse = {
+              id: 'stream',
+              collection: message.collection,
+              result: ev
+            };
+            // console.log(`ws.on('message'... ->  send 1 ${JSON.stringify(streamResponse)}`);
+            ws.send(JSON.stringify(streamResponse));
+          }
         });
         onCloseHandlers.push(() => changeStreamSub.unsubscribe());
         return;
@@ -102,6 +118,7 @@ export function startWebsocketServer(options) {
         collection: message.collection,
         result
       };
+      // console.log(`ws.on('message'... ->  send 2`);
       ws.send(JSON.stringify(response));
     });
   });

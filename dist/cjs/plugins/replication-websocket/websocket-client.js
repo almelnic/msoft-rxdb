@@ -144,7 +144,7 @@ async function replicateWithWebsocketServer(options) {
         id: 'stream',
         collection: options.collection.name,
         method: 'masterChangeStream$',
-        params: []
+        params: [options.filterByField]
       };
       wsClient.send(JSON.stringify(streamRequest));
     }
